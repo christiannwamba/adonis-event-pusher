@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Adonis and Pusher awesomeness</title>
+	{{ css('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css') }}
+</head>
+<body>
+<div class="container">
+	<div class="content">
+		<h1>Adonis and Pusher</h1>
+		<ul id="messages" class="list-group">
+		</ul>
+	</div>
+</div>
+{{ script('https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js') }}
+<!-- Include the Pusher Client library -->
+{{ script('https://js.pusher.com/4.1/pusher.min.js') }}
+<script>
+	//Open a connection to Pusher
+	let pusher = new Pusher('0eea15985b4899e7a2e3', {
+		cluster: 'eu',
+		encrypted: true
+	});
+
+	//Subscribe to the channel we specified in our Adonis Application
+	let channel = pusher.subscribe('adonis-channel')
+
+	//Listen for events on the channel
+	channel.bind('send-message', (data) => {
+			let listItem = $("<li class='list-group-item'>" + data.message + "</li>")
+			$('#messages').prepend(listItem)
+	})
+</script>
+</body>
+</html>
